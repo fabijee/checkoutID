@@ -41,9 +41,6 @@ app.post("/save-cart-id", async (req, res) => {
 
 
 
-
-const fetch = require('node-fetch');
-
 app.use(express.json());
 
 const SHOPIFY_API_URL = "https://a3stda-9m.myshopify.com/api/2024-04/graphql.json";
