@@ -39,5 +39,54 @@ app.post("/save-cart-id", async (req, res) => {
     }
 });
 
+
+
+
+const express = require('express');
+const fetch = require('node-fetch');
+const app = express();
+
+app.use(express.json());
+
+const SHOPIFY_API_URL = "https://a3stda-9m.myshopify.com/api/2024-04/graphql.json";
+const SHOPIFY_ACCESS_TOKEN = "99e98dbc5e42a02cc46b83e5fc3c6e94"; // Hier dein Token einfügen
+
+// API-Route für Cart-Erstellung
+app.post('/create-cart', async (req, res) => {
+    try {
+        const response = await fetch(SHOPIFY_API_URL, {
+            method: 'POST',
+            headers: {
+                'X-Shopify-Storefront-Access-Token': SHOPIFY_ACCESS_TOKEN,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `
+                    mutation {
+                        cartCreate {
+                            cart {
+                                id
+                            }
+                        }
+                    }
+                `
+            })
+        });
+
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        console.error("Fehler bei der Cart-Erstellung:", error);
+        res.status(500).json({ error: "Interner Serverfehler" });
+    }
+});
+
+// Server starten
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
+
+
+
+
 // Server starten
 app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
