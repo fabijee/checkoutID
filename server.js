@@ -1,47 +1,50 @@
 const express = require('express');
-const cors = require('cors'); // cors importieren
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// CORS aktivieren – entweder für eine bestimmte Domain:
-app.use(cors({ origin: 'https://a3stda-9m.myshopify.com' }));
-// oder für alle Domains (nicht immer empfohlen):
-// app.use(cors());
+// MongoDB Verbindung
+mongoose.connect("mongodb+srv://fabije:Hacker12311@reisemedizindb.3ts0g.mongodb.net/reisemedizinDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error(err));
 
+// Middleware
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://fabije:Coolfabian1.@reisemedizindb.3ts0g.mongodb.net/reisemedizinDB', { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
-.then(() => console.log("MongoDB verbunden"))
-.catch(err => console.error("MongoDB Verbindungsfehler:", err));
-
-// Mongoose Schema und Model definieren
-const checkoutSchema = new mongoose.Schema({
-  checkoutId: { type: String, required: true },
-  travelQuestionnaire: { type: Object, required: true },
+// Checkout Schema
+const CheckoutSchema = new mongoose.Schema({
+  checkout_id: { type: String, required: true },
+  items: { type: Array, required: true },
   createdAt: { type: Date, default: Date.now }
 });
 
-const Checkout = mongoose.model('Checkout', checkoutSchema);
+const Checkout = mongoose.model('Checkout', CheckoutSchema);
 
-// Endpoint zum Speichern der Checkout-Daten
-app.post('/saveCheckoutData', async (req, res) => {
+// API-Route zum Empfangen der Checkout-ID
+app.post('/api/cart', async (req, res) => {
   try {
-    const { checkoutId, travelQuestionnaire } = req.body;
-    if (!checkoutId || !travelQuestionnaire) {
-      return res.status(400).json({ message: 'Fehlende erforderliche Felder' });
+    const { checkout_id, items } = req.body;
+    if (!checkout_id || !items) {
+      return res.status(400).json({ message: 'checkout_id und items sind erforderlich' });
     }
-    const newEntry = new Checkout({ checkoutId, travelQuestionnaire });
-    await newEntry.save();
-    res.json({ message: 'Daten erfolgreich gespeichert' });
-  } catch (err) {
-    res.status(500).json({ message: 'Serverfehler', error: err });
+
+    const newCheckout = new Checkout({ checkout_id, items });
+    await newCheckout.save();
+
+    res.status(201).json({ message: 'Checkout gespeichert', checkout_id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Serverfehler' });
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
+// Server starten
+app.listen(PORT, () => {
+  console.log(`Server läuft auf Port ${PORT}`);
+});
