@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // MongoDB Verbindung
-mongoose.connect("mongodb+srv://fabije:Hacker12311@reisemedizindb.3ts0g.mongodb.net/reisemedizinDB", {
+mongoose.connect("mongodb+srv://fabije:Coolfabian1.@reisemedizindb.3ts0g.mongodb.net/reisemedizinDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
