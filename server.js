@@ -16,8 +16,7 @@ mongoose.connect("mongodb+srv://fabije:Coolfabian1.@reisemedizindb.3ts0g.mongodb
 .catch(err => console.error(err));
 
 const cors = require('cors');
-app.use(cors(a3stda-9m.myshopify.com
-));
+app.use(cors(a3stda-9m.myshopify.com));
 
 // Middleware
 app.use(bodyParser.json());
