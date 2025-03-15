@@ -1,11 +1,17 @@
 const express = require('express');
+const cors = require('cors'); // cors importieren
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const app = express();
+
+// CORS aktivieren – entweder für eine bestimmte Domain:
+app.use(cors({ origin: 'https://a3stda-9m.myshopify.com' }));
+// oder für alle Domains (nicht immer empfohlen):
+// app.use(cors());
+
 app.use(bodyParser.json());
 
-// Verbindung zur MongoDB-Datenbank herstellen
 mongoose.connect('mongodb+srv://fabije:Coolfabian1.@reisemedizindb.3ts0g.mongodb.net/reisemedizinDB', { 
   useNewUrlParser: true, 
   useUnifiedTopology: true 
@@ -39,4 +45,3 @@ app.post('/saveCheckoutData', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
-
