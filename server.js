@@ -2,8 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-const cors = require('cors');
-app.use(cors());
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +14,10 @@ mongoose.connect("mongodb+srv://fabije:Coolfabian1.@reisemedizindb.3ts0g.mongodb
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error(err));
+
+const cors = require('cors');
+app.use(cors(a3stda-9m.myshopify.com
+));
 
 // Middleware
 app.use(bodyParser.json());
@@ -39,6 +42,8 @@ app.post('/api/cart', async (req, res) => {
     const newCheckout = new Checkout({ checkout_id, items });
     await newCheckout.save();
 
+
+    
     res.status(201).json({ message: 'Checkout gespeichert', checkout_id });
   } catch (error) {
     console.error(error);
